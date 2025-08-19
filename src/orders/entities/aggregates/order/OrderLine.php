@@ -1,0 +1,73 @@
+<?php
+
+namespace Src\orders\entities\aggregates\order;
+
+use Src\orders\entities\Product;
+use Src\orders\value_objects\Id;
+use Src\orders\value_objects\OrderLineTotalPrice;
+use Src\orders\value_objects\Quantity;
+
+/**
+ * @package Src\orders\entities\aggregates\cart
+ *
+ * Represents a cart item in the domain, is an internal entity of the Cart aggregate
+ */
+class OrderLine {
+
+    /**
+     * @param Id $id
+     * @param Product $product
+     * @param CartItemQuantity $quantity
+     */
+    public function __construct(
+        private Id $id,
+        private Product $product,
+        private Quantity $quantity,
+        private OrderLineTotalPrice $total_price 
+    ) {}
+
+    /**
+     * @return string It is the id of the cart item
+     */
+    public function id(): string {
+        return $this->id->value();
+    }
+
+    /**
+     * @return Product
+     */
+    public function product(): Product {
+        return $this->product;
+    }
+
+    /**
+     * @return int
+     */
+    public function quantity(): int {
+        return $this->quantity->value();
+    }
+
+    /**
+     * @return float
+     */
+    public function total_price(): float {
+        return $this->product->price() * $this->quantity->value();
+    }
+
+    /**
+     * @param int $quantity Represents the desired internal quantity to increase in the cart item.
+     * @return void
+     */
+    public function increment_quantity(int $quantity): void {
+
+        $this->quantity = $this->quantity->increment_quantity($quantity);
+    }
+
+    /**
+     * @param int $quantity Represents the desired internal quantity to decrease in the cart item.
+     * @return void
+     */
+    public function decrement_quantity(int $quantity): void {
+        $this->quantity = $this->quantity->decrement_quantity($quantity);
+    }
+}

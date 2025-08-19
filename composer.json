@@ -1,0 +1,22 @@
+{
+    "name": "mauro/ddd_php",
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/",
+            "Test\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mauro Caetano",
+            "email": "lucianocaetano1999@gmail.com"
+        }
+    ],
+    "require": {
+        "cocur/slugify": "^4.6",
+        "ramsey/uuid": "^4.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    }
+}
