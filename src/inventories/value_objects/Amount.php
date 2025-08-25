@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\orders\value_objects;
+namespace Src\inventories\value_objects;
 
-use Src\orders\exception\TheAmountCannotBeLessThanOneException;
+use Src\inventories\exception\TheAmountCannotBeLessThanOneException;
 
 class Amount {
 
@@ -14,6 +14,8 @@ class Amount {
         if($this->amount < 1) {
             throw new TheAmountCannotBeLessThanOneException();
         }
+        
+        $this->currency->assertValidAmount($this->amount);
     }
 
     public function amount() {
@@ -56,7 +58,7 @@ class Amount {
         );
     }
 
-    public function __toString() {
-        return $this->amount . ' ' . $this->currency->symbol();
+    public function toString() {
+        return $this->amount . ' ' . $this->currency->code();
     }
 }

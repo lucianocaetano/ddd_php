@@ -1,12 +1,23 @@
 <?php
 
-namespace Src\shop\entities;
+namespace Src\inventories\entities;
 
-use Src\shop\value_objects\CategoryParent;
-use Src\shop\value_objects\Id;
+use Src\inventories\value_objects\CategoryParent;
+use Src\inventories\value_objects\Id;
 
+/**
+ * @package Src\inventories\entities
+ *
+ * Represents a category in the domain
+ */
 class Category {
-    
+
+    /**
+     * @param Id $id
+     * @param string $slug
+     * @param string $name
+     * @param CategoryParent $parent
+     */ 
     public function __construct(
         private Id $id,
         private string $slug,
@@ -29,4 +40,5 @@ class Category {
     public function parent(): string|null {
         return $this->parent->value();
     }
+
 }

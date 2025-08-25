@@ -1,12 +1,12 @@
 <?php
 
-namespace src\shop\value_objects;
+namespace src\inventories\value_objects;
 
-use Src\shop\exception\ParentCategoryIDCannotBeEmptyException;
+use Src\inventories\exception\ParentCategoryIDCannotBeEmptyException;
 
 class CategoryParent {
 
-    private readonly string $parent;
+    private readonly ?string $parent;
 
     public function __construct(
         string $parent = null

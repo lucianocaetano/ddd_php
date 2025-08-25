@@ -1,11 +1,13 @@
 <?php
 
-namespace Src\shop\entities;
+namespace Src\inventories\entities;
 
-use Src\shop\value_objects\Id;
+use Src\inventories\value_objects\Amount;
+use Src\inventories\value_objects\ProductQuantity;
+use Src\inventories\value_objects\Id;
 
 /**
- * @package Src\shop\entities
+ * @package Src\inventories\entities
  * 
  * Represents a product in the domain
  */
@@ -16,8 +18,9 @@ class Product {
      * @param string $slug
      * @param string $name
      * @param string $description
-     * @param int $quantity
-     * @param float $price
+     * @param Id $supplier_id
+     * @param ProductQuantity $quantity
+     * @param Amount $price
      * @param Id $category_id
      */
     public function __construct(
@@ -25,8 +28,9 @@ class Product {
         private string $slug,
         private string $name,
         private string $description,
-        private int $quantity,
-        private float $price,
+        private Id $supplier_id,
+        private ProductQuantity $quantity,
+        private Amount $price,
         private Id $category_id,
     ) {}
 
@@ -49,9 +53,25 @@ class Product {
     /**
      * @return string
      */
+    public function slug(): string {
+        
+        return $this->slug;
+    }
+
+    /**
+     * @return string
+     */
     public function description(): string {
         
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function supplier_id(): string {
+        
+        return $this->supplier_id->value();
     }
 
     /**
@@ -59,15 +79,15 @@ class Product {
      */
     public function quantity(): int {
 
-        return $this->quantity;
+        return $this->quantity->value();
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function price(): float {
+    public function price(): string {
 
-        return $this->price;
+        return $this->price->toString();
     }
 
     /**
@@ -77,6 +97,5 @@ class Product {
 
         return $this->category_id->value();
     }
-
 }
 

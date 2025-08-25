@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\orders\exception;
+namespace Src\inventories\exception;
 
 class CurrencyCodeIsNotSupportedException extends \InvalidArgumentException {
 

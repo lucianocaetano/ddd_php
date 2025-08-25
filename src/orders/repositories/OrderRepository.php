@@ -12,11 +12,8 @@ use Src\orders\entities\aggregates\order\Order;
 interface OrderRepository {
 
     public function save(Order $order);
-
     public function findById(string $id);
-
     public function findByClientId(string $client_id);
-
     public function update(Order $order);
 }
 

@@ -18,8 +18,8 @@ class Product {
      * @param string $slug
      * @param string $name
      * @param string $description
-     * @param ProductQuantity $quantity
-     * @param ProductPrice $price
+     * @param int $quantity
+     * @param float $price
      * @param Id $category_id
      */
     public function __construct(
@@ -27,8 +27,8 @@ class Product {
         private string $slug,
         private string $name,
         private string $description,
-        private ProductQuantity $quantity,
-        private ProductPrice $price,
+        private int $quantity,
+        private float $price,
         private Id $category_id,
     ) {}
 
@@ -61,7 +61,7 @@ class Product {
      */
     public function quantity(): string {
 
-        return $this->quantity->value();
+        return $this->quantity;
     }
 
     /**
@@ -69,7 +69,7 @@ class Product {
      */
     public function price(): float {
 
-        return $this->price->value();
+        return $this->price;
     }
 
     /**

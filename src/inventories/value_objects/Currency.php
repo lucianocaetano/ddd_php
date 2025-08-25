@@ -1,9 +1,9 @@
 <?php
 
-namespace Src\orders\value_objects;
+namespace Src\inventories\value_objects;
 
-use AmountExceedsAllowedDecimalsException;
-use Src\orders\exception\CurrencyCodeIsNotSupportedException;
+use Src\inventories\exception\AmountExceedsAllowedDecimalsException;
+use Src\inventories\exception\CurrencyCodeIsNotSupportedException;
 
 /**
  * @package Src\orders\value_objects
@@ -53,7 +53,8 @@ class Currency
 
     public function assertValidAmount(float $value): void
     {
-        if (round($value, $this->decimals()) != $value) {
+        $decimalsInValue = strlen(substr(strrchr((string)$value, "."), 1) ?? '');
+        if ($decimalsInValue > $this->decimals()) {
             throw new AmountExceedsAllowedDecimalsException();
         }
     }

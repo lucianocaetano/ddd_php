@@ -6,7 +6,7 @@ class PaymentStatus {
 
     private function getStatus(): array {
 
-        return ['pending', 'approved', 'rejected', 'refunded', 'canceled'];
+        return ['pending', 'authorized', 'completed', 'failed', 'canceled', 'refunded', 'disputed'];
     } 
 
     public function __construct(
@@ -14,7 +14,7 @@ class PaymentStatus {
     ) {
 
         if(!in_array($this->status, $this->getStatus())) {
-            
+            throw new \Exception('Invalid payment status');
         } 
     }
 }

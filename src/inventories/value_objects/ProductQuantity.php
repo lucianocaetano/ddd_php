@@ -1,6 +1,8 @@
 <?php
 
-namespace Src\orders\quantity_objects;
+namespace Src\inventories\value_objects;
+
+use Src\inventories\exception\TheQuantityCannotBeLessThan1Exception;
 
 class ProductQuantity {
     
@@ -11,7 +13,7 @@ class ProductQuantity {
     )
     {
         if($quantity < 1) {
-            throw new \InvalidArgumentException("The quantity cannot be less than 1");
+            throw new TheQuantityCannotBeLessThan1Exception();
         }
 
         $this->quantity = $quantity;
