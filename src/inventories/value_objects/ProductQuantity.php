@@ -19,7 +19,6 @@ class ProductQuantity {
         $this->quantity = $quantity;
     }
 
-
     public function value() {
         return $this->quantity;
     }
