@@ -2,7 +2,7 @@
 
 namespace Src\orders\entities\aggregates\order;
 
-use Src\orders\entities\Product;
+use Src\orders\entities\aggregates\order\Product;
 use Src\orders\value_objects\Id;
 use Src\orders\value_objects\OrderLineTotalPrice;
 use Src\orders\value_objects\Quantity;

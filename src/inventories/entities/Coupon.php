@@ -1,11 +1,11 @@
 <?php
 
-namespace Src\shop\entities;
+namespace Src\inventories\events\entities;
 
 use DateTime;
-use Src\shop\value_objects\CouponCode;
+use Src\inventories\value_objects\CouponCode;
+use Src\inventories\exception\InvalidCouponPercentageException;
 use Src\shop\exception\CouponNotValidException;
-use Src\shop\exception\InvalidCouponPercentageException;
 
 /**
  * @package Src\shop\entities
@@ -35,21 +35,5 @@ class Coupon {
 
     public function code() {
         return $this->code;
-    }
-
-    public function isValidNow(): bool
-    {
-        return $this->isActive && new DateTime() < $this->expiresAt;
-    }
-
-    public function applyTo(float $subtotal): float
-    {
-        if (!$this->isValidNow()) throw new CouponNotValidException();
-
-        return match ($this->type) {
-            'fixed' => max($subtotal - $this->amount, 0),
-            'percent' => max($subtotal * (1 - $this->amount / 100), 0),
-            default => $subtotal,
-        };
     }
 }

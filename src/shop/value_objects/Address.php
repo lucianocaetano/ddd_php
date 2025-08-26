@@ -14,7 +14,6 @@ class Address {
      * @param string $city
      * @param string $zip
      * param country $country
-     * @throws \InvalidArgumentException
      */
     public function __construct(
         private string $street,
@@ -39,7 +38,7 @@ class Address {
         return $this->country;
     }
 
-    public function __toString(): string {
+    public function toString(): string {
         return $this->street . ', ' . $this->city . ', ' . $this->zip . ', ' . $this->country;
     }
 }

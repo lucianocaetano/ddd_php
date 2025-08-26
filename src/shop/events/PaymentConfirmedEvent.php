@@ -14,7 +14,6 @@ class PaymentConfirmedEvent extends BaseEvent
 
     /**
      * @param array<int, array{
-     *     id: string,
      *     product_id: string,
      *     quantity: int,
      *     total_price: float

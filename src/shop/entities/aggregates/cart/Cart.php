@@ -3,14 +3,9 @@
 namespace Src\shop\entities\aggregates\cart;
 
 use Src\shop\entities\aggregates\cart\CartItem;
-use Src\shop\entities\Coupon;
 use Src\shop\entities\Product;
 use Src\shop\events\PaymentConfirmedEvent;
-use Src\shop\exception\CouponAlreadyAddedException;
-use Src\shop\exception\CouponNotFoundException;
 use Src\shop\exception\ProductQuantityNotAvailableException;
-use Src\shop\exception\YouCanNotAddMoreCouponsException;
-use Src\shop\exception\YouCanNotAddMoreThanThreeCouponsException;
 use Src\shop\shared\domain\AggregateRoot;
 use Src\shop\value_objects\Address;
 use Src\shop\value_objects\CartTotalPrice;
@@ -30,7 +25,6 @@ class Cart extends AggregateRoot {
      * @param CartTotalPrice $total_price
      * @param CartTotalQuantity $total_quantity
      * @param array[string, CartItem] $items
-     * @param array[string, Coupon] $coupons
      */
     public function __construct(
         private Id $id,
@@ -38,7 +32,6 @@ class Cart extends AggregateRoot {
         private CartTotalPrice $total_price,
         private Quantity $total_quantity,
         private array $items = [],
-        private array $coupons = []
     ) {}
 
 
@@ -74,13 +67,13 @@ class Cart extends AggregateRoot {
      * @return float returns the cart total price with applied coupons
      */
     public function total_price_with_coupons(): float {
-        $total_price = $this->total_price;
+        $total_price=0;
 
-        foreach ($this->coupons as $_ => $coupon) {
-            $total_price = $coupon->applyTo($total_price);
+        foreach($this->items as $item) {
+            $total_price += $item->total_price();
         }
-        
-        return $total_price->value();
+
+        return $total_price;
     }
 
     /**
@@ -88,44 +81,6 @@ class Cart extends AggregateRoot {
      */
     public function total_quantity(): int {
         return $this->total_quantity->value();
-    }
-
-    /**
-     * @return Coupon[] returns the cart coupons
-     */
-    public function list_coupons(): array {
-
-        return $this->coupons;
-    }
-
-    /**
-     * Add a coupon to the cart
-     *
-     * @param Coupon $coupon
-     * @return void
-     * @throws CouponAlreadyAddedException if the coupon already exists
-     * @throws YouCanNotAddMoreCouponsException If the discount drops to 1200 because of this coupon
-     * @throws YouCanNotAddMoreThanThreeCouponsException if the cart already has 3 coupons
-     */
-    public function add_coupon(Coupon $coupon): void {
-        if(array_key_exists($coupon->code()->value(), $this->coupons)) throw new CouponAlreadyAddedException();
-        if($coupon->applyTo($this->total_price) === 1200.00) throw new YouCanNotAddMoreCouponsException();
-        if(count($this->coupons) >= 3) throw new YouCanNotAddMoreThanThreeCouponsException();
-
-        $this->coupons[$coupon->code()->value()] = $coupon;
-    }
-
-    /**
-     * Remove a coupon from the cart
-     *
-     * @param Coupon $coupon
-     * @return void
-     * @throws CouponNotFoundException if the coupon is not found
-     */
-    public function remove_coupon(Coupon $coupon): void {
-        if(!array_key_exists($coupon->code()->value(), $this->coupons)) throw new CouponNotFoundException();
-
-        unset($this->coupons[$coupon->code()->value()]);
     }
 
     /**
@@ -240,15 +195,14 @@ class Cart extends AggregateRoot {
             $payment_method,
             $this->mapItemsToArray(),
             $this->total_quantity(),
-            $address_1->__toString(),
-            $address_2->__toString()
+            $address_1->toString(),
+            $address_2->toString()
         ));
     }
 
     private function mapItemsToArray(): array {
         return array_map(function (CartItem $item) {
             return [
-                "id" => $item->id(),
                 "product_id" => $item->product()->id(),
                 "quantity" => $item->quantity() 
             ];

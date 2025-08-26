@@ -2,7 +2,9 @@
 
 namespace Src\shop\entities\aggregates\cart;
 
+use Src\shop\entities\Coupon;
 use Src\shop\entities\Product;
+use Src\shop\exception\CouponNotValidException;
 use Src\shop\value_objects\Id;
 use Src\shop\value_objects\Quantity;
 
@@ -17,12 +19,23 @@ class CartItem {
      * @param Id $id
      * @param Product $product
      * @param Quantity $quantity
+     * @param Coupon coupon
      */
     public function __construct(
         private Id $id,
         private Product $product,
-        private Quantity $quantity
-    ) {}
+        private Quantity $quantity,
+        private ?Coupon $coupon = null,
+    ) {
+
+        if(!$this->coupon->isValidNow()) {
+            throw new CouponNotValidException();
+        }
+
+        if($product->coupon()) {
+            $this->coupon = $product->coupon(); 
+        }
+    }
 
     /**
      * @return string It is the id of the cart item
@@ -47,9 +60,19 @@ class CartItem {
 
     /**
      * @return float
+     * @throws \InvalidArgumentException Coupon not valid
      */
     public function total_price(): float {
-        return $this->product->price() * $this->quantity->value();
+
+        if(!$this->coupon)
+            return $this->product->price() * $this->quantity->value();
+
+        if(!$this->coupon->isValidNow())
+            throw new \InvalidArgumentException("Coupon not valid");
+
+        $price = $this->product->price() * $this->quantity->value();
+
+        return $this->coupon->applyTo($price);
     }
 
     /**

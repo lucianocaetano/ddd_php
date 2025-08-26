@@ -1,10 +1,8 @@
 <?php
 
-namespace Src\orders\entities;
+namespace Src\orders\entities\aggregates\order;
 
-use Src\orders\quantity_objects\ProductQuantity;
 use Src\orders\value_objects\Id;
-use Src\orders\value_objects\ProductPrice;
 
 /**
  * @package Src\shop\entities

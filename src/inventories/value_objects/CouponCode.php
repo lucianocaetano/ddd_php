@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\shop\value_objects;
+namespace Src\inventories\value_objects;
 
 final class CouponCode {
     private readonly string $code;
